@@ -54,8 +54,7 @@ class AsnDefinition(object, metaclass=Meta_AddedToForwardedSyntaxes):
     # Receive tokens by `def __init__(self, toks: p.ParseResults)`
     # and set `self.value` to the Python object after conversion.
 
-    _raw_syntax: ClassVar[Type[pp.ParserElement]]
-    _raw_syntax = None
+    _raw_syntax = None  # type: ClassVar[Type[pp.ParserElement]]
 
     @classmethod
     def syntax(cls) -> Type[pp.ParserElement]:
@@ -75,28 +74,27 @@ class AsnDefinition(object, metaclass=Meta_AddedToForwardedSyntaxes):
 
 class AsnBoolean(AsnDefinition):
     """X.680 18.3"""
-    value: bool
-
     def __init__(self, toks: pp.ParseResults):
-        self.value = {
+        value = {
             'TRUE': True,
             'FALSE': False
         }[toks[0]]
+        self.value = value  # type: bool
 
     _raw_syntax = pp.Keyword('TRUE') | pp.Keyword('FALSE')
 
 
 class AsnInteger(AsnDefinition):
     """X.680 19.9"""
-    value: Union[int, str]
-
     def __init__(self, toks: pp.ParseResults):
         if 'SignedNumber' in toks:
-            self.value = int(toks['SignedNumber'])
+            value = int(toks['SignedNumber'])
         elif 'identifier' in toks:
-            self.value = toks['identifier']
+            value = toks['identifier']
         else:
             raise ValueError('unknown tokens for integer:', toks)
+
+        self.value = value  # type: Union[int, str]
 
     _raw_syntax = (
         # (?!\.) is appended to avoid confision with realnumber
@@ -107,11 +105,9 @@ class AsnInteger(AsnDefinition):
 
 class AsnEnumerated(AsnDefinition):
     """X.680 20.8"""
-    value: str
-
     def __init__(self, toks: pp.ParseResults):
         assert len(toks) == 1
-        self.value = toks[0]
+        self.value = str(toks[0])
 
     _raw_syntax = identifier.copy()
 
@@ -122,8 +118,6 @@ class AsnReal(AsnDefinition):
     Limitations:
         - SequenceValue not supprted; parsed into dict by AsnSequence
     """
-    value: float
-
     def __init__(self, toks: pp.ParseResults):
         self.value = float(toks[0])
 
@@ -146,16 +140,16 @@ class AsnBitString(AsnDefinition):
             by AsnSequenceOf and AsnEnumerated
         - {} not supported; parsed into {} (i.e. `dict()`) by AsnSequence
     """
-    value: Union[bitarray.bitarray, Any]
-
     def __init__(self, toks: pp.ParseResults):
         if 'bstring' in toks:
             bits = re.sub(r'\s', '', toks['bstring'])
-            self.value = bitarray.bitarray(bits)
+            value = bitarray.bitarray(bits)
         elif 'containing' in toks:
-            self.value = toks['containing'].value
+            value = toks['containing'].value
         else:
             raise ValueError('unknown toks for bit string: {}'.format(toks))
+
+        self.value = value  # type: Union[bitarray.bitarray, Any]
 
     _raw_syntax = pp.Forward()
 
@@ -178,16 +172,16 @@ class AsnOctetString(AsnDefinition):
 
         - bstring not supported; parsed into bitarray (not bytes) by AsnBitstring
     """
-    value: Union[bytes, Any]
-
     def __init__(self, s, loc, toks: pp.ParseResults):
         if 'hstring' in toks:
             hexstr = re.sub(r'\s', '', toks['hstring'])
-            self.value = bytes.fromhex(hexstr)
+            value = bytes.fromhex(hexstr)
         elif 'containing' in toks:
-            self.value = toks['containing'].value
+            value = toks['containing'].value
         else:
             raise ValueError('unknown toks for octet string: {}'.format(toks))
+
+        self.value = value  # type: Union[bytes, Any]
 
     _raw_syntax = pp.Forward()
 
@@ -205,8 +199,6 @@ class AsnOctetString(AsnDefinition):
 
 class AsnNull(AsnDefinition):
     """X.680 24.3"""
-    value: None
-
     def __init__(self, toks: pp.ParseResults):
         self.value = None
 
@@ -215,12 +207,10 @@ class AsnNull(AsnDefinition):
 
 class AsnSequence(AsnDefinition):
     """X.680 25.18"""
-    value: Dict[str, Any]
-
     def __init__(self, toks: pp.ParseResults):
         self.value = dict(
             (tok[0], tok[1].value) for tok in toks
-        )
+        )  # type: Dict[str, Any]
 
     _raw_syntax = pp.Forward()
 
@@ -244,10 +234,8 @@ class AsnSequenceOf(AsnDefinition):
 
         - NamedValueList not supported; parsed into dict by AsnSequence
     """
-    value: List[Any]
-
     def __init__(self, toks: pp.ParseResults):
-        self.value = [tok.value for tok in toks]
+        self.value = [tok.value for tok in toks]  # type: List[Any]
 
     _raw_syntax = pp.Forward()
 
@@ -266,11 +254,9 @@ class AsnSequenceOf(AsnDefinition):
 
 class AsnChoice(AsnDefinition):
     """X.680 29.11"""
-    value: Dict[str, Any]
-
     def __init__(self, toks: pp.ParseResults):
         assert len(toks) == 2
-        self.value = {toks[0]: toks[1].value}
+        self.value = {toks[0]: toks[1].value}  # type: Dict[str, Any]
 
     _raw_syntax = pp.Forward()
 
@@ -290,10 +276,8 @@ class AsnObjectIdentifier(AsnDefinition):
 
         - Only NumberForm supported
     """
-    value: List[int]
-
     def __init__(self, toks: pp.ParseResults):
-        self.value = [int(tok) for tok in toks]
+        self.value = [int(tok) for tok in toks]  # type: List[int]
 
     _raw_syntax = (
         pp.Suppress(pp.Literal(r'{}'))
@@ -318,12 +302,10 @@ class AsnCString(AsnDefinition):
                 prior to or following the end of line in the "cstring".
 
     """
-    value: str
-
     def __init__(self, toks: pp.ParseResults):
         assert len(toks) == 1
-        tok = toks[0]  # type: str
-        self.value = tok.replace("\"\"", "\"")
+        tok = toks[0]
+        self.value = tok.replace("\"\"", "\"")  # type: str
 
     _raw_syntax = (
         pp.Suppress(pp.Literal("\""))
@@ -334,11 +316,9 @@ class AsnCString(AsnDefinition):
 
 class AsnOpenTypeFieldVal(AsnDefinition):
     """X.681 14.6"""
-    value: Dict[str, Any]
-
     def __init__(self, toks: pp.ParseResults):
         assert len(toks) == 2
-        self.value = {toks[0]: toks[1].value}
+        self.value = {toks[0]: toks[1].value}  # type: Dict[str, Any]
 
     _raw_syntax = pp.Forward()
 
@@ -358,12 +338,9 @@ class AsnValue(AsnDefinition):
 
         - Only supports value forms in get_forwarded_syntax
     """
-
-    value: Any
-
     def __init__(self, s, loc, toks: pp.ParseResults):
         assert isinstance(toks, pp.ParseResults)
-        self.value = toks[0].value
+        self.value = toks[0].value  # type: Any
 
     _raw_syntax = pp.Forward()
 
@@ -407,15 +384,11 @@ class AsnValueAssignment(AsnDefinition):
         value (Any): Python object that holds the value.
     """
 
-    value_name: str
-    type_name: str
-    value: Any
-
     def __init__(self, toks: pp.ParseResults):
         assert len(toks) == 3
-        self.value_name = toks[0]
-        self.type_name = toks[1]
-        self.value = toks[2].value
+        self.value_name = str(toks[0])
+        self.type_name = str(toks[1])
+        self.value = toks[2].value  # type: Any
 
     def __str__(self):
         return str(self.__dict__)

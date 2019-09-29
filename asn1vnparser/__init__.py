@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for asn1vnparser."""
+"""Parses ASN.1 value notation into a Python object or JSON without requiring its ASN.1 schema."""
 
-__author__ = """mtannaan"""
-__email__ = '12782884+mtannaan@users.noreply.github.com'
 __version__ = '0.1.0'

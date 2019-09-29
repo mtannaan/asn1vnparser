@@ -26,7 +26,25 @@ Parses ASN.1 value notation into a Python object or JSON without requiring its A
 Features
 --------
 
-* TODO
+* Parsing ASN.1 value notation into a Python object, or a JSON string
+* No ASN.1 Schema Required
+
+Limitations
+-----------
+
+* Since Knowledge of schema is not used, misdetection of ASN.1 types can occur; see Translations section.
+* Some ASN.1 types and grammars are not supported; see grammar.py.
+
+Translations
+------------
+
+Performs the following type translations:
+
+==========  ===========  =========
+ASN.1 Type  Python Type  JSON Type
+==========  ===========  =========
+xx          yy           zz
+==========  ===========  =========
 
 Credits
 -------

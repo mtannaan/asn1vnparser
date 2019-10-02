@@ -73,3 +73,24 @@ class TestAsn1vnparser(unittest.TestCase):
                     stdout.getvalue(),
                     '{"value_name": "value-1", "type_name": "Type-1", "value": [{"a1": "enum1"}, {"a2": 2}]}\n'
                 )
+
+        with self.subTest('parsing a single value into JSON'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write(r'SomeType : {1, 2, 3}')
+                stdin.seek(0)
+                cli.main(["-jv"])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    '{"SomeType": [1, 2, 3]}\n')
+
+        with self.subTest('parsing multiple value assignments into JSON'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write('value-1 Type-1 ::= 3\nvalue-2 Type-2 ::= TRUE')
+                stdin.seek(0)
+                cli.main(["-jm"])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    '[{"value_name": "value-1", "type_name": "Type-1", "value": 3}, {"value_name": "value-2", "type_name": "Type-2", "value": true}]\n'
+                )

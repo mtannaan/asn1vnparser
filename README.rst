@@ -32,11 +32,11 @@ Features
 Limitations
 -----------
 
-* Since Knowledge of schema is not used, misdetection of ASN.1 types can occur; see Translations section.
+* Since Knowledge of schema is not used, misdetection of ASN.1 types can occur; see Type Translations section.
 * Some ASN.1 types and grammars are not supported; see grammar.py.
 
-Translations
-------------
+Type Translations
+-----------------
 
 `asn1vnparser` performs the following type translations:
 

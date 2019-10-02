@@ -11,7 +11,7 @@ import asn1vnparser
 
 def main():
     """Console script for asn1vnparser.
-    
+
     See `python cli.py --help`."""
     parser = argparse.ArgumentParser(
         prog='asn1vnparser',
@@ -25,7 +25,7 @@ def main():
     parser.add_argument('-j', '--json', action='store_true',
                         help='prints out JSON obejct. By default, this program prints out repr() of the resulting python object.')
     parser.add_argument('-o', '--output_file', nargs='?', default=None,
-                        help='output file path. By default this program print the result to stdout.')
+                        help='output file path. By default this program prints the result to stdout.')
     parser.add_argument('-f', '--force', action='store_true',
                         help='force to overwrite an existing file.')
     args = parser.parse_args()

@@ -28,6 +28,11 @@ New Features
         {'value_name': 'value2', 'type_name': 'Type2', 'value': 'the-value'}
     ]
 
+Bug Fixes
+*********
+
+- CLI no longer crashes when given ``--json`` option.
+
 
 0.1.0 (2019-09-29)
 ------------------

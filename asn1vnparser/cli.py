@@ -9,7 +9,7 @@ import sys
 import asn1vnparser
 
 
-def main():
+def main(orig_args=None):
     """Console script for asn1vnparser.
 
     See `python cli.py --help`."""
@@ -28,7 +28,8 @@ def main():
                         help='output file path. By default this program prints the result to stdout.')
     parser.add_argument('-f', '--force', action='store_true',
                         help='force to overwrite an existing file.')
-    args = parser.parse_args()
+
+    args = parser.parse_args(orig_args)
 
     if args.input_file == '-':
         input_str = sys.stdin.read()
@@ -41,7 +42,6 @@ def main():
     else:
         ret_value = asn1vnparser.parse_asn1_value_assignment(
             input_str, as_json=args.json)
-        ret_value = ret_value.__dict__
 
     if args.json:
         ret_str = ret_value

@@ -395,8 +395,11 @@ class AsnValueAssignment(AsnDefinition):
 
     __repr__ = __str__
 
-    _raw_syntax = valuereference.copy() + typereference.copy() + \
+    _raw_syntax = (
+        pp.StringStart() +
+        valuereference.copy() + typereference.copy() +
         pp.Suppress('::=') + AsnValue.syntax()
+    )
 
 
 for _i in _forwarded_syntaxes:

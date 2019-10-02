@@ -170,7 +170,7 @@ def parse_asn1_value_assignment(
 def parse_asn1_value_assignments(
         asn1_val_assignments: str,
         as_json: bool = False) -> List[Union[_grammar.AsnValueAssignment, str]]:
-    r"""parses multiple ASN.1 value assignments.
+    r"""Parses multiple ASN.1 value assignments.
 
     Examples:
 

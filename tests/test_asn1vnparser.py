@@ -6,9 +6,12 @@
 
 import json
 import pathlib
+import sys
+import test.support
 import unittest
 
 import asn1vnparser
+from asn1vnparser import cli
 
 
 class TestAsn1vnparser(unittest.TestCase):
@@ -21,9 +24,7 @@ class TestAsn1vnparser(unittest.TestCase):
         """Tear down test fixtures, if any."""
 
     def test_json(self):
-        """
-        Test conversion to JSON representations.
-        """
+        """Test conversion to JSON representations."""
 
         cases_dir = pathlib.Path(__file__).parent / 'cases'
 
@@ -49,12 +50,47 @@ class TestAsn1vnparser(unittest.TestCase):
 
     def test_command_line_interface(self):
         """Test the CLI."""
-        # TODO: CLI testing
-        pass
 
-        #assert result.exit_code == 0
-        #assert 'asn1vnparser.cli.main' in result.output
+        with self.subTest('parsing value assignment into python obj dump'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write(r'value-1 Type-1 ::= {f1 v1, f2 a2 : 2}')
+                stdin.seek(0)
+                cli.main([])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    "{'value_name': 'value-1', 'type_name': 'Type-1', " +
+                    "'value': {'f1': 'v1', 'f2': {'a2': 2}}}\n"
+                )
 
-        #help_result = runner.invoke(cli.main, ['--help'])
-        #assert help_result.exit_code == 0
-        #assert '--help  Show this message and exit.' in help_result.output
+        with self.subTest('parsing value assignment into JSON'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write(r'value-1 Type-1 ::= {a1 : enum1, a2 : 2}')
+                stdin.seek(0)
+                cli.main(["-j"])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    '{"value_name": "value-1", "type_name": "Type-1", "value": [{"a1": "enum1"}, {"a2": 2}]}\n'
+                )
+
+        with self.subTest('parsing a single value into JSON'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write(r'SomeType : {1, 2, 3}')
+                stdin.seek(0)
+                cli.main(["-jv"])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    '{"SomeType": [1, 2, 3]}\n')
+
+        with self.subTest('parsing multiple value assignments into JSON'):
+            with test.support.captured_stdout() as stdout, \
+                    test.support.captured_stdin() as stdin:
+                stdin.write('value-1 Type-1 ::= 3\nvalue-2 Type-2 ::= TRUE')
+                stdin.seek(0)
+                cli.main(["-jm"])
+                self.assertEqual(
+                    stdout.getvalue(),
+                    '[{"value_name": "value-1", "type_name": "Type-1", "value": 3}, {"value_name": "value-2", "type_name": "Type-2", "value": true}]\n'
+                )

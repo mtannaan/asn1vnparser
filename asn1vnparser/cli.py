@@ -9,26 +9,30 @@ import sys
 import asn1vnparser
 
 
-def main():
+def main(orig_args=None):
     """Console script for asn1vnparser.
-    
+
     See `python cli.py --help`."""
     parser = argparse.ArgumentParser(
         prog='asn1vnparser',
         description='Prints out Python object (repr) or JSON for an ASN.1 value.')
+    g_multi_not_support_value_only = parser.add_mutually_exclusive_group()
     parser.add_argument('input_file', nargs='?', default='-',
                         help='input file path. Pass - (a single hypehn) to read from stdin.')
     parser.add_argument('-e', '--encoding', default=None,
                         help='input file encoding')
-    parser.add_argument('-v', '--value_only', action='store_true',
-                        help='parses an ASN.1 value (e.g. "3"), not a value assignment (e.g. "value Type ::= 3")')
+    g_multi_not_support_value_only.add_argument('-m', '--multi', action='store_true',
+                                                help='parses multiple ASN.1 value assignments into a list. When -m is specified, -v is not supported.')
+    g_multi_not_support_value_only.add_argument('-v', '--value_only', action='store_true',
+                                                help='parses an ASN.1 value (e.g. "3"), not a value assignment (e.g. "value Type ::= 3")')
     parser.add_argument('-j', '--json', action='store_true',
                         help='prints out JSON obejct. By default, this program prints out repr() of the resulting python object.')
     parser.add_argument('-o', '--output_file', nargs='?', default=None,
-                        help='output file path. By default this program print the result to stdout.')
+                        help='output file path. By default this program prints the result to stdout.')
     parser.add_argument('-f', '--force', action='store_true',
                         help='force to overwrite an existing file.')
-    args = parser.parse_args()
+
+    args = parser.parse_args(orig_args)
 
     if args.input_file == '-':
         input_str = sys.stdin.read()
@@ -38,10 +42,12 @@ def main():
 
     if args.value_only:
         ret_value = asn1vnparser.parse_asn1_value(input_str, as_json=args.json)
+    elif args.multi:
+        ret_value = asn1vnparser.parse_asn1_value_assignments(
+            input_str, as_json=args.json)
     else:
         ret_value = asn1vnparser.parse_asn1_value_assignment(
             input_str, as_json=args.json)
-        ret_value = ret_value.__dict__
 
     if args.json:
         ret_str = ret_value

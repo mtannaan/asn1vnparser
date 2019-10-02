@@ -395,13 +395,15 @@ class AsnValueAssignment(AsnDefinition):
 
     __repr__ = __str__
 
-    _raw_syntax = valuereference.copy() + typereference.copy() + \
+    _raw_syntax = (
+        valuereference.copy() + typereference.copy() +
         pp.Suppress('::=') + AsnValue.syntax()
+    )
 
 
 for _i in _forwarded_syntaxes:
     _i.add_forwarded_syntax()
 
 # to be exported
-value_syntax = AsnValue.syntax()
-value_assignment_syntax = AsnValueAssignment.syntax()
+value_syntax = pp.StringStart() + AsnValue.syntax()
+value_assignment_syntax = pp.StringStart() + AsnValueAssignment.syntax()

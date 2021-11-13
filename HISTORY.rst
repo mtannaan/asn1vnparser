@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.1 (2021-11-14)
+------------------
+- Disable pyparsing v3, which breaks tests
+- Update license to ISC
+
+
 0.2.0 (2019-10-02)
 ------------------
 New Features

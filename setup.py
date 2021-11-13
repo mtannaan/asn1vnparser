@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['bitarray>=0.8.3', 'pyparsing>=2.4.2']
+requirements = ['bitarray>=0.8.3', 'pyparsing<3,>=2.4.2']
 
 setup_requirements = []
 

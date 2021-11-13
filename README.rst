@@ -19,7 +19,7 @@ asn1vnparser
 Parses ASN.1 value notation into a Python object or JSON without requiring its ASN.1 schema.
 
 
-* Free software: MIT license
+* Free software: ISC license
 * Documentation: https://asn1vnparser.readthedocs.io.
 
 

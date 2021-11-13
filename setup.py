@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['bitarray>=0.8.3', 'pyparsing>=2.4.2']
+requirements = ['bitarray>=0.8.3', 'pyparsing<3,>=2.4.2']
 
 setup_requirements = []
 
@@ -24,7 +24,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: ISC License (ISCL)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
@@ -37,7 +37,7 @@ setup(
         ],
     },
     install_requires=requirements,
-    license="MIT license",
+    license="ISC license",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='asn1vnparser',

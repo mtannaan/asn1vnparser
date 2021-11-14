@@ -1,18 +1,18 @@
 language: python
 python:
-    - 3.9
-    - 3.8
-    - 3.7
-    - 3.6
+- 3.9
+- 3.8
+- 3.7
+- 3.6
 install: pip install -U tox-travis
 script: tox
 deploy:
-    provider: pypi
-    distributions: sdist bdist_wheel
-    user: __token__
-    password:
-        secure: d34xMXvFnM4zy+QqzpKPrs/FeGci48LWk2eYyQ5nnAg6QwPutz62pwWKda2PDf/MkmyvS6DczQtv6oukrfUNJ5bepEhks/1lGLx/QtlmbY7IJUR4McfqCn9xFvyHzDIFEIjyTaBKRE1putHq/XBq+E1I06pARjJnw3wjn6lQ7mm5Z1vXLk8y+Gi1x/C8phOecdNT0s78zWWOOdYHXc1HvVdo4XOtzieCSC8r3A6DFDnxOlI8G0leKZxbCbrmIg2+z76/1zNA1Qi/Oq41X+bLhMycvZ9pl6oVLdjPKwWGFp4Ez9EJSBH97gARqQEOQ+miBe8c+juzyQF+t9ndQ1KPOfHULf92whi4Rame+t3VIMB1gAjOUCmkTVrTYnXWiLvlFiyZUEAp8YK7ADz43QZXu+71niusE6C6/6q7uCVTdMHFDW1d3y/BkhCSstlM0/GqVzBgp3cxCOwxgEr/+mjkeSF87N3gXhPtbWgxlBJ0vwY80xqr4IhwG4zosF6r1EuohCT7FeQ6YijiDATzQ9slmm+3wNm/VEIdyygqlyPuBcXW9ruJUljspX4qDITwoJoQzTZ1PtRbyANcXQm8jg2ryYjSPMTLdSfFv0gNxLLFhu76Qo181cK9aZd6SB0ZvOqBMYN5ZUttRMmmcaUPEQ5pEjElevBT30nIZ2tr7Bx/Pys=
-    on:
-        tags: true
-        repo: mtannaan/asn1vnparser
-        python: 3.9
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: __token__
+  password:
+    secure: cveO8PzS8YUqUKzkiKNzHDO6aufoJoF8GRc0MR1ti+3/UWEK0j1Eh3OSnxoNVc86eMMP1vd87dLL74CO9+5u67jJ2fQG9ouLhge+bOcPvlAK59nGUobueOc0LXG7EtagLdC0+mbDVoae3BAEyTwfDT4FqUWxUAOb8t4Yx8f+MkAsv1wDGZFamD8hqP4QIM4lkkU7PL3qUs0PomVrz8YrxNzXM0TpQ/iLn5Ch3tTKLjdOu6gQDcluB32OoEe4PC5GobSOV6a8Jgl0ABj1RnZCWv58g9hm14WnVN5zHVZ/TrHi/6wDs/oWOyyEkGfFR/FNeGNarWrG+Egh2A5F7oc8nj/g/kRFIt9VKiUWJ606p/zTHxu9sZpzac0ThqriVePCQtRNX/GBHyN9y5IUiEU5xvBvHA4o4I90zwBMmQRXXBLZQiNOTyQH49f7yXW3AAICK/fRSBBmG5XPNuK8Gj5hvBjx2eFlaz/S3HEKMp765rhHHoyROMvLr8auCxHbQmS1yKDZ5QC4RumGbc6ZBrSWw9egPDd0MUoEpUqXdXsOTn5qC5iR5HZEKSJmB4CUpiPEL8/YaKjOIVwWh0BgbHepFYcgZPMJsObIfjJ9SeewEdHrYSj08FYTxO/eCicJiP3MijeupS7ltRNuLm9j7y0+3QHpe6XxBayP1gyzZtd/sqc=
+  on:
+    tags: true
+    repo: mtannaan/asn1vnparser
+    python: 3.9

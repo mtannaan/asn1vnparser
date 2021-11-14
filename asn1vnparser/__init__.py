@@ -2,7 +2,7 @@
 
 """Parses ASN.1 value notation into a Python object or JSON without requiring its ASN.1 schema."""
 
-__version__ = '__version__ = '0.2.2''
+__version__ = '__version__ = '0.2.3''
 
 from asn1vnparser._asn1vnparser import parse_asn1_value, parse_asn1_value_assignment, parse_asn1_value_assignments
 from asn1vnparser._grammar import AsnValueAssignment
